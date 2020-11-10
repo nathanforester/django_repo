@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+ {% for category in categories %}
+ <div class="nav">
+     <li class="nav-item">
+         <a class="nav-link" href="{% url 'category_listings' category %}"> {{ category }}</a>
+     </li>
+ </div>
+{% endfor %}
+{% endblock %}

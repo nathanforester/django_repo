@@ -1,0 +1,89 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <div {% if message.tags %} class=" {{ message.tags }} " {% endif %} role="alert">
+            <p> {{ message }} </p>
+          </div>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="active_listings">
+      <div class="w3-container w3-black w3-center w3-allerta">
+        <p class="w3-xlarge">{{ listing.title }}</p>
+      </div>
+      <div class="flex-img">
+        <img src="{{ listing.IMG_URL }}">
+      </div>
+      <p>Description: {{ listing.description }}</p>
+      <p>Category: {{ listing.category }}</p>
+      <p>Starting Price: {{ listing.starting_price }}</p>
+      <p>Current Price: {{ listing.current_price }}</p>
+      <p>Start date: {{ listing.start_date }}</p>
+      <p>End date: {{ listing.end_date }}</p>
+      <p>Sold: {{ listing.is_sold }}</p>
+      <br>
+    </div>
+
+
+    <!-- show bidding and watchlist buttons if listing is active -->
+    {% if listing.is_sold == False %}
+
+    <!-- Place a new bid button if listing is active -->
+    <div class="">
+      <form class="bid" action="{% url 'bidding' listing.pk %}" method="POST">
+        {% csrf_token %}​​​​
+        {{ bid_form }}
+        <button type="new_bid" class="btn btn-primary" name="button">Bid</button>
+      </form>
+    </div>
+
+    <!-- Add to watchlist button -->
+    <div class="watchlist">
+        <form class="" action="{% url 'add_to_watchlist' listing.pk %}"  method="POST">
+          <input type="submit" class="btn btn-dark" name="add_to_watchlist" value="Add to Watchlist"></input>
+          {% csrf_token %}​​​​
+        </form>
+    </div>
+
+    <!-- Declare listing over and show winner -->
+    {% else %}
+
+    Listing winner: {{ winner }}
+
+    {% endif %}
+
+    <!-- If current logged in user created this listing show ability to end lisitng -->
+    {% if logged_in_user == listing.user_id and listing.is_sold == False %}
+    <div class="listing">
+      <form class="listing" action="{% url 'end_listing' listing.pk logged_in_user.id %}" method="POST">
+        {% csrf_token %}​​​​
+        <button type="end_listing" class="btn btn-warning" name="button">End listing</button>
+      </form>
+    </div>
+    {% endif %}
+
+    <h2> Add a Comment </h2>
+    <div class="add_comments">
+      <form class="add_comments" action="{% url 'add_comments' listing.pk %}" method=POST>
+       {% csrf_token %}
+        {{ add_comments }}
+      <button type="submit_comment" class="btn" name="button">Submit</button>
+     </form>
+    </div>
+
+    <h3> Comments </h3>
+    {% for comment in comments %}
+    <li>
+      {{ comment.comment }}
+    </li>
+    <div class="display_comments">
+    {% endfor %}
+
+
+
+{% endblock %}

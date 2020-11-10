@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+{% block head %}
+    <h1> Active Listings </h1>
+{% endblock %}
+
+{% block body %}
+    {% for listing in categories %}
+      <div class="active_listings">
+        <div class="w3-container w3-black w3-center w3-allerta">
+          <p class="w3-xlarge">{{ listing.title }}</p>
+        </div>
+        <div class="flex-img">
+          <img src="{{ listing.IMG_URL }}">
+        </div>
+        <p>Description: {{ listing.description }}</p>
+        <p>Current Price: {{ listing.current_price }}</p>
+        <p>End date: {{ listing.end_date }}</p>
+        <a href="{% url 'listing_page' listing.listing_id %}" class="btn btn-primary">View Listing</a>
+        <br>
+      </div>
+
+    {% endfor %}
+{% endblock %}

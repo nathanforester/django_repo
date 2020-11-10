@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <div {% if message.tags %} class=" {{ message.tags }} " {% endif %} role="alert">
+            <p> {{ message }} </p>
+          </div>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% for listing in watchlist_listings %}
+      <div class="active_listings">
+        <div class="w3-container w3-black w3-center w3-allerta">
+          <p class="w3-xlarge">{{ listing.title }}</p>
+        </div>
+
+        <div class="flex-img">
+          <img src="{{ listing.IMG_URL }}">
+        </div>
+
+        <p>Description: {{ listing.description }}</p>
+        <p>Current Price: {{ listing.current_price }}</p>
+        <p>End date: {{ listing.end_date }}</p>
+        <a href="{% url 'listing_page' listing.listing_id %}" class="btn btn-primary">View Listing</a>
+      </div>
+
+      <div class="">
+        <a href="{% url 'watchlist_remove' listing.listing_id %}" class="btn btn-dark">Remove from watchlist</a>
+      </div>
+
+    <!-- if watchlist_listings is empty list -->
+    {% empty %}
+    <li>
+      <h1>Sorry, no items in your watchlist.</h1>
+    </li>
+
+    {% endfor %}
+
+
+{% endblock %}
